@@ -1,3 +1,7 @@
+<?php
+use yii\helpers\Url;
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -147,7 +151,7 @@
                     </a>
                 </li>
                 <li class="settings hidden-phone">
-                    <a href="signin.html" role="button">
+                    <a href="<?=Url::to(['public/logout'])?>" role="button">
                         <i class="icon-share-alt"></i>
                     </a>
                 </li>
