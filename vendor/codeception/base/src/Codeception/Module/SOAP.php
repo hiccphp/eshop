@@ -44,7 +44,7 @@ use Codeception\Util\XmlStructure;
  * * xmlResponse - last SOAP response (DOMDocument)
  *
  */
-class SOAP extends CodeceptionModule implements DependsOnModule, API
+class SOAP extends CodeceptionModule implements DependsOnModule
 {
     protected $config = [
         'schema' => "",
@@ -229,7 +229,7 @@ EOF;
             $response = $this->processExternalRequest($action, $req);
         }
 
-        $this->debugSection("Response", $response);
+        $this->debugSection("Response", (string) $response);
         $this->xmlResponse = SoapUtils::toXml($response);
         $this->xmlStructure = null;
     }
@@ -298,7 +298,7 @@ EOF;
     public function dontSeeSoapResponseEquals($xml)
     {
         $xml = SoapUtils::toXml($xml);
-        \PHPUnit_Framework_Assert::assertXmlStringNotEqualsXmlString($xml->C14N(), $this->getXmlResponse()->C14N());
+        \PHPUnit\Framework\Assert::assertXmlStringNotEqualsXmlString($xml->C14N(), $this->getXmlResponse()->C14N());
     }
 
 

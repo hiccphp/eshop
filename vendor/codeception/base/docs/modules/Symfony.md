@@ -7,12 +7,45 @@ This module uses Symfony Crawler and HttpKernel to emulate requests and test res
 
 <https://github.com/Codeception/symfony-demo>
 
-## Status
-
-* Maintainer: **raistlin**
-* Stability: **stable**
-
 ## Config
+
+### Symfony 4.x
+
+* app_path: 'src' - in Symfony 4 Kernel is located inside `src`
+* environment: 'local' - environment used for load kernel
+* em_service: 'doctrine.orm.entity_manager' - use the stated EntityManager to pair with Doctrine Module.
+* debug: true - turn on/off debug mode
+* cache_router: 'false' - enable router caching between tests in order to [increase performance](http://lakion.com/blog/how-did-we-speed-up-sylius-behat-suite-with-blackfire)
+* rebootable_client: 'true' - reboot client's kernel before each request
+
+#### Example (`functional.suite.yml`) - Symfony 4 Directory Structure
+
+    modules:
+       enabled:
+          - Symfony:
+              app_path: 'src'
+              environment: 'test'
+
+
+### Symfony 3.x
+
+* app_path: 'app' - specify custom path to your app dir, where the kernel interface is located.
+* var_path: 'var' - specify custom path to your var dir, where bootstrap cache is located.
+* environment: 'local' - environment used for load kernel
+* em_service: 'doctrine.orm.entity_manager' - use the stated EntityManager to pair with Doctrine Module.
+* debug: true - turn on/off debug mode
+* cache_router: 'false' - enable router caching between tests in order to [increase performance](http://lakion.com/blog/how-did-we-speed-up-sylius-behat-suite-with-blackfire)
+* rebootable_client: 'true' - reboot client's kernel before each request
+
+#### Example (`functional.suite.yml`) - Symfony 3 Directory Structure
+
+    modules:
+       enabled:
+          - Symfony:
+              app_path: 'app/front'
+              var_path: 'var'
+              environment: 'local_test'
+
 
 ### Symfony 2.x
 
@@ -32,26 +65,6 @@ This module uses Symfony Crawler and HttpKernel to emulate requests and test res
            environment: 'local_test'
 ```
 
-### Symfony 3.x Directory Structure
-
-* app_path: 'app' - specify custom path to your app dir, where the kernel interface is located.
-* var_path: 'var' - specify custom path to your var dir, where bootstrap cache is located.
-* environment: 'local' - environment used for load kernel
-* em_service: 'doctrine.orm.entity_manager' - use the stated EntityManager to pair with Doctrine Module.
-* debug: true - turn on/off debug mode
-* cache_router: 'false' - enable router caching between tests in order to [increase performance](http://lakion.com/blog/how-did-we-speed-up-sylius-behat-suite-with-blackfire)
-* rebootable_client: 'true' - reboot client's kernel before each request
-
-### Example (`functional.suite.yml`) - Symfony 3 Directory Structure
-
-    modules:
-       enabled:
-          - Symfony:
-              app_path: 'app/front'
-              var_path: 'var'
-              environment: 'local_test'
-
-
 ## Public Properties
 
 * kernel - HttpKernel instance
@@ -64,7 +77,7 @@ This module uses Symfony Crawler and HttpKernel to emulate requests and test res
 Usage example:
 
 ```yaml
-class_name: AcceptanceTester
+actor: AcceptanceTester
 modules:
     enabled:
         - Symfony:
@@ -75,7 +88,6 @@ modules:
             url: http://your-url.com
             browser: phantomjs
 ```
-
 
 
 ## Actions
@@ -126,7 +138,7 @@ public function seeResponseContains($text)
 ```
 
  * `return` string
- * `throws`  ModuleException
+@throws ModuleException
 
 
 ### _loadPage
@@ -181,8 +193,8 @@ To load arbitrary page for interaction, use `_loadPage` method.
  * `param array` $server
  * `param null` $content
  * `return` mixed|Crawler
- * `throws`  ExternalUrlException
- * `see`  `_loadPage`
+@throws ExternalUrlException
+@see `_loadPage`
 
 
 ### _savePageSource
@@ -217,7 +229,7 @@ $I->amOnPage('/');
 $I->amOnPage('/register');
 ```
 
- * `param` $page
+ * `param string` $page
 
 
 ### amOnRoute
@@ -237,12 +249,12 @@ $I->amOnRoute('posts.show', array('id' => 34));
 
 ### attachFile
  
-Attaches a file relative to the Codeception data directory to the given file upload field.
+Attaches a file relative to the Codeception `_data` directory to the given file upload field.
 
 ``` php
 <?php
 // file is stored in 'tests/_data/prices.xls'
-$I->attachFile('input[ * `type="file"]',`  'prices.xls');
+$I->attachFile('input[@type="file"]', 'prices.xls');
 ?>
 ```
 
@@ -284,7 +296,7 @@ $I->click('Submit');
 // CSS button
 $I->click('#form input[type=submit]');
 // XPath
-$I->click('//form/*[ * `type=submit]');` 
+$I->click('//form/*[@type=submit]');
 // link in context
 $I->click('Logout', '#nav');
 // using strict locator
@@ -322,9 +334,10 @@ Give a locator as the second parameter to match a specific region.
 
 ```php
 <?php
-$I->dontSee('Login');                    // I can suppose user is already logged in
-$I->dontSee('Sign Up','h1');             // I can suppose it's not a signup page
-$I->dontSee('Sign Up','//body/h1');      // with XPath
+$I->dontSee('Login');                         // I can suppose user is already logged in
+$I->dontSee('Sign Up','h1');                  // I can suppose it's not a signup page
+$I->dontSee('Sign Up','//body/h1');           // with XPath
+$I->dontSee('Sign Up', ['css' => 'body h1']); // with strict CSS locator
 ```
 
 Note that the search is done after stripping all HTML tags from the body,
@@ -341,8 +354,8 @@ But will ignore strings like:
 
 For checking the raw source code, use `seeInSource()`.
 
- * `param`      $text
- * `param null` $selector
+ * `param string` $text
+ * `param string` $selector optional
 
 
 ### dontSeeCheckboxIsChecked
@@ -381,7 +394,7 @@ $I->dontSeeCurrentUrlEquals('/');
 ?>
 ```
 
- * `param` $uri
+ * `param string` $uri
 
 
 ### dontSeeCurrentUrlMatches
@@ -395,7 +408,7 @@ $I->dontSeeCurrentUrlMatches('~$/users/(\d+)~');
 ?>
 ```
 
- * `param` $uri
+ * `param string` $uri
 
 
 ### dontSeeElement
@@ -426,7 +439,7 @@ $I->dontSeeInCurrentUrl('/users/');
 ?>
 ```
 
- * `param` $uri
+ * `param string` $uri
 
 
 ### dontSeeInField
@@ -440,7 +453,7 @@ $I->dontSeeInField('Body','Type your comment here');
 $I->dontSeeInField('form textarea[name=body]','Type your comment here');
 $I->dontSeeInField('form input[type=hidden]','hidden_value');
 $I->dontSeeInField('#searchform input','Search');
-$I->dontSeeInField('//form/*[ * `name=search]','Search');` 
+$I->dontSeeInField('//form/*[@name=search]','Search');
 $I->dontSeeInField(['name' => 'search'], 'Search');
 ?>
 ```
@@ -525,8 +538,8 @@ $I->dontSeeLink('Checkout now', '/store/cart.php');
 ?>
 ```
 
- * `param` $text
- * `param null` $url
+ * `param string` $text
+ * `param string` $url optional
 
 
 ### dontSeeOptionIsSelected
@@ -564,8 +577,8 @@ Fills a text field or textarea with the given string.
 
 ``` php
 <?php
-$I->fillField("//input[ * `type='text']",`  "Hello World!");
-$I->fillField(['name' => 'email'], 'jon * `mail.com');` 
+$I->fillField("//input[@type='text']", "Hello World!");
+$I->fillField(['name' => 'email'], 'jon@mail.com');
 ?>
 ```
 
@@ -584,7 +597,6 @@ $I->grabAttributeFrom('#tooltip', 'title');
 ?>
 ```
 
-
  * `param` $cssOrXpath
  * `param` $attribute
 
@@ -602,7 +614,7 @@ You can set additional cookie params like `domain`, `path` in array passed as la
 
 ### grabFromCurrentUrl
  
-Executes the given regular expression against the current URI and returns the first match.
+Executes the given regular expression against the current URI and returns the first capturing group.
 If no parameters are provided, the full URI is returned.
 
 ``` php
@@ -612,7 +624,7 @@ $uri = $I->grabFromCurrentUrl();
 ?>
 ```
 
- * `param null` $uri
+ * `param string` $uri optional
 
 
 
@@ -640,6 +652,15 @@ $aLinks = $I->grabMultiple('a', 'href');
  * `param` $cssOrXpath
  * `param` $attribute
  * `return` string[]
+
+
+### grabPageSource
+ 
+Grabs current page source code.
+
+@throws ModuleException if no page was opened.
+
+ * `return` string Current page source code.
 
 
 ### grabService
@@ -670,7 +691,7 @@ $em = $I->grabServiceFromContainer('doctrine');
 
  * `param` $service
  * `[Part]` services
- * `deprecated`  Use grabService instead
+@deprecated Use grabService instead
 
 
 ### grabTextFrom
@@ -706,8 +727,19 @@ subsequent HTTP requests through PhpBrowser.
 Example:
 ```php
 <?php
-$I->setHeader('X-Requested-With', 'Codeception');
+$I->haveHttpHeader('X-Requested-With', 'Codeception');
 $I->amOnPage('test-headers.php');
+?>
+```
+
+To use special chars in Header Key use HTML Character Entities:
+Example:
+Header with underscore - 'Client_Id'
+should be represented as - 'Client&#x0005F;Id' or 'Client&#95;Id'
+
+```php
+<?php
+$I->haveHttpHeader('Client&#95;Id', 'Codeception');
 ?>
 ```
 
@@ -776,9 +808,10 @@ parameter to only search within that element.
 
 ``` php
 <?php
-$I->see('Logout');                 // I can suppose user is logged in
-$I->see('Sign Up', 'h1');          // I can suppose it's a signup page
-$I->see('Sign Up', '//body/h1');   // with XPath
+$I->see('Logout');                        // I can suppose user is logged in
+$I->see('Sign Up', 'h1');                 // I can suppose it's a signup page
+$I->see('Sign Up', '//body/h1');          // with XPath
+$I->see('Sign Up', ['css' => 'body h1']); // with strict CSS locator
 ```
 
 Note that the search is done after stripping all HTML tags from the body,
@@ -795,8 +828,8 @@ But will *not* be true for strings like:
 
 For checking the raw source code, use `seeInSource()`.
 
- * `param`      $text
- * `param null` $selector
+ * `param string` $text
+ * `param string` $selector optional
 
 
 ### seeCheckboxIsChecked
@@ -807,7 +840,7 @@ Checks that the specified checkbox is checked.
 <?php
 $I->seeCheckboxIsChecked('#agree'); // I suppose user agreed to terms
 $I->seeCheckboxIsChecked('#signup_form input[type=checkbox]'); // I suppose user agreed to terms, If there is only one checkbox in form.
-$I->seeCheckboxIsChecked('//form/input[ * `type=checkbox`  and  * `name=agree]');` 
+$I->seeCheckboxIsChecked('//form/input[@type=checkbox and @name=agree]');
 ?>
 ```
 
@@ -856,7 +889,7 @@ $I->seeCurrentUrlEquals('/');
 ?>
 ```
 
- * `param` $uri
+ * `param string` $uri
 
 
 ### seeCurrentUrlMatches
@@ -870,7 +903,7 @@ $I->seeCurrentUrlMatches('~$/users/(\d+)~');
 ?>
 ```
 
- * `param` $uri
+ * `param string` $uri
 
 
 ### seeElement
@@ -892,14 +925,14 @@ $I->seeElement(['css' => 'form input'], ['name' => 'login']);
 
  * `param` $selector
  * `param array` $attributes
- * `return` 
+@return
 
 
 ### seeEmailIsSent
  
 Checks if any email were sent by last request
 
- * `throws`  \LogicException
+@throws \LogicException
 
 
 ### seeInCurrentRoute
@@ -929,13 +962,13 @@ $I->seeInCurrentUrl('/users/');
 ?>
 ```
 
- * `param` $uri
+ * `param string` $uri
 
 
 ### seeInField
  
-Checks that the given input field or textarea contains the given value.
-For fuzzy locators, fields are matched by label text, the "name" attribute, CSS, and XPath.
+Checks that the given input field or textarea *equals* (i.e. not just contains) the given value.
+Fields are matched by label text, the "name" attribute, CSS, or XPath.
 
 ``` php
 <?php
@@ -943,7 +976,7 @@ $I->seeInField('Body','Type your comment here');
 $I->seeInField('form textarea[name=body]','Type your comment here');
 $I->seeInField('form input[type=hidden]','hidden_value');
 $I->seeInField('#searchform input','Search');
-$I->seeInField('//form/*[ * `name=search]','Search');` 
+$I->seeInField('//form/*[@name=search]','Search');
 $I->seeInField(['name' => 'search'], 'Search');
 ?>
 ```
@@ -1005,9 +1038,9 @@ $form = [
      'checkbox1' => true,
      // ...
 ];
-$I->submitForm('//form[ * `id=my-form]',`  $form, 'submitButton');
+$I->submitForm('//form[@id=my-form]', $form, 'submitButton');
 // $I->amOnPage('/path/to/form-page') may be needed
-$I->seeInFormFields('//form[ * `id=my-form]',`  $form);
+$I->seeInFormFields('//form[@id=my-form]', $form);
 ?>
 ```
 
@@ -1054,8 +1087,8 @@ $I->seeLink('Logout','/logout'); // matches <a href="/logout">Logout</a>
 ?>
 ```
 
- * `param`      $text
- * `param null` $url
+ * `param string` $text
+ * `param string` $url optional
 
 
 ### seeNumberOfElements
@@ -1065,13 +1098,11 @@ Checks that there are a certain number of elements matched by the given locator 
 ``` php
 <?php
 $I->seeNumberOfElements('tr', 10);
-$I->seeNumberOfElements('tr', [0,10]); //between 0 and 10 elements
+$I->seeNumberOfElements('tr', [0,10]); // between 0 and 10 elements
 ?>
 ```
  * `param` $selector
- * `param mixed` $expected :
-- string: strict number
-- array: range of numbers [0,10]
+ * `param mixed` $expected int or int[]
 
 
 ### seeOptionIsSelected
@@ -1117,7 +1148,7 @@ Selects an option in a select tag or in radio button group.
 <?php
 $I->selectOption('form select[name=account]', 'Premium');
 $I->selectOption('form input[name=payment]', 'Monthly');
-$I->selectOption('//form/select[ * `name=account]',`  'Monthly');
+$I->selectOption('//form/select[@name=account]', 'Monthly');
 ?>
 ```
 
@@ -1214,7 +1245,7 @@ $I->setCookie('PHPSESSID', 'el4ukv0kqbvoirg7nkp4dncpk3');
 
 ### submitForm
  
-Submits the given form on the page, optionally with the given form
+Submits the given form on the page, with the given form
 values.  Pass the form field's values as an array in the second
 parameter.
 
@@ -1422,4 +1453,4 @@ Remove service $serviceName from the lists of persistent services.
 
  * `param string` $serviceName
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.2/src/Codeception/Module/Symfony.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.4/src/Codeception/Module/Symfony.php">Help us to improve documentation. Edit module reference</a></div>

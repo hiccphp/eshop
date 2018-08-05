@@ -1,5 +1,10 @@
-Yii 2 Basic Project Template
-============================
+<p align="center">
+    <a href="https://github.com/yiisoft" target="_blank">
+        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
+    </a>
+    <h1 align="center">Yii 2 Basic Project Template</h1>
+    <br>
+</p>
 
 Yii 2 Basic Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
 rapidly creating small projects.
@@ -8,8 +13,8 @@ The template contains the basic features including user login/logout and a conta
 It includes all commonly used configurations that would allow you to focus on adding new
 features to your application.
 
-[![Latest Stable Version](https://poser.pugx.org/yiisoft/yii2-app-basic/v/stable.png)](https://packagist.org/packages/yiisoft/yii2-app-basic)
-[![Total Downloads](https://poser.pugx.org/yiisoft/yii2-app-basic/downloads.png)](https://packagist.org/packages/yiisoft/yii2-app-basic)
+[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-basic.svg)](https://packagist.org/packages/yiisoft/yii2-app-basic)
+[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-basic.svg)](https://packagist.org/packages/yiisoft/yii2-app-basic)
 [![Build Status](https://travis-ci.org/yiisoft/yii2-app-basic.svg?branch=master)](https://travis-ci.org/yiisoft/yii2-app-basic)
 
 DIRECTORY STRUCTURE
@@ -46,7 +51,6 @@ at [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
 You can then install this project template using the following command:
 
 ~~~
-php composer.phar global require "fxp/composer-asset-plugin:^1.2.0"
 php composer.phar create-project --prefer-dist --stability=dev yiisoft/yii2-app-basic basic
 ~~~
 
@@ -56,7 +60,6 @@ directly under the Web root.
 ~~~
 http://localhost/basic/web/
 ~~~
-
 
 ### Install from an Archive File
 
@@ -77,6 +80,29 @@ You can then access the application through the following URL:
 ~~~
 http://localhost/basic/web/
 ~~~
+
+
+### Install with Docker
+
+Update your vendor packages
+
+    docker-compose run --rm php composer update --prefer-dist
+    
+Run the installation triggers (creating cookie validation code)
+
+    docker-compose run --rm php composer install    
+    
+Start the container
+
+    docker-compose up -d
+    
+You can then access the application through the following URL:
+
+    http://127.0.0.1:8000
+
+**NOTES:** 
+- Minimum required Docker engine version `17.04` for development (see [Performance tuning for volume mounts](https://docs.docker.com/docker-for-mac/osxfs-caching/))
+- The default configuration uses a host-volume in your home directory `.docker-composer` for composer caches
 
 
 CONFIGURATION
@@ -102,7 +128,6 @@ return [
 - Refer to the README in the `tests` directory for information specific to basic application tests.
 
 
-
 TESTING
 -------
 
@@ -116,8 +141,8 @@ By default there are 3 test suites:
 Tests can be executed by running
 
 ```
-composer exec codecept run
-``` 
+vendor/bin/codecept run
+```
 
 The command above will execute unit and functional tests. Unit tests are testing the system components, while functional
 tests are for testing user interaction. Acceptance tests are disabled by default as they require additional setup since
@@ -143,7 +168,23 @@ To execute acceptance tests do the following:
 
     ```
     java -jar ~/selenium-server-standalone-x.xx.x.jar
+    ```
+
+    In case of using Selenium Server 3.0 with Firefox browser since v48 or Google Chrome since v53 you must download [GeckoDriver](https://github.com/mozilla/geckodriver/releases) or [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) and launch Selenium with it:
+
+    ```
+    # for Firefox
+    java -jar -Dwebdriver.gecko.driver=~/geckodriver ~/selenium-server-standalone-3.xx.x.jar
+    
+    # for Google Chrome
+    java -jar -Dwebdriver.chrome.driver=~/chromedriver ~/selenium-server-standalone-3.xx.x.jar
     ``` 
+    
+    As an alternative way you can use already configured Docker container with older versions of Selenium and Firefox:
+    
+    ```
+    docker run --net=host selenium/standalone-firefox:2.53.0
+    ```
 
 5. (Optional) Create `yii2_basic_tests` database and update it by applying migrations if you have them.
 
@@ -164,13 +205,13 @@ To execute acceptance tests do the following:
 
    ```
    # run all available tests
-   composer exec codecept run
+   vendor/bin/codecept run
 
    # run acceptance tests
-   composer exec codecept run acceptance
+   vendor/bin/codecept run acceptance
 
    # run only unit and functional tests
-   composer exec codecept run unit,functional
+   vendor/bin/codecept run unit,functional
    ```
 
 ### Code coverage support
@@ -180,13 +221,13 @@ to collect code coverage. You can run your tests and collect coverage with the f
 
 ```
 #collect coverage for all tests
-composer exec codecept run -- --coverage-html --coverage-xml
+vendor/bin/codecept run -- --coverage-html --coverage-xml
 
 #collect coverage only for unit tests
-composer exec codecept run unit -- --coverage-html --coverage-xml
+vendor/bin/codecept run unit -- --coverage-html --coverage-xml
 
 #collect coverage for unit and functional tests
-composer exec codecept run functional,unit -- --coverage-html --coverage-xml
+vendor/bin/codecept run functional,unit -- --coverage-html --coverage-xml
 ```
 
 You can see code coverage output under the `tests/_output` directory.

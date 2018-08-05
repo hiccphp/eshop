@@ -48,6 +48,7 @@ use yii\helpers\Url;
         <div class="span4 box">
             <div class="content-wrap">
                 <h6>慕课商城 - 找回密码</h6>
+                <?= Yii::$app->session->getFlash('info'); ?>
                 <?=$form->field($model, 'adminuser')->textInput(['class'=>'span12', 'placeholder'=> '管理员账号']);?>
                 <?=$form->field($model, 'adminemail')->textInput(['class'=>'span12', 'placeholder'=> '管理员邮箱']);?>
                 <a href="<?=Url::to(['public/login'])?>" class="forgot">返回登录</a>

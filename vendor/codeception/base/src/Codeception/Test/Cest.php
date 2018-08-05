@@ -2,6 +2,7 @@
 namespace Codeception\Test;
 
 use Codeception\Example;
+use Codeception\Lib\Console\Message;
 use Codeception\Lib\Parser;
 use Codeception\Step\Comment;
 use Codeception\Util\Annotation;
@@ -43,7 +44,7 @@ class Cest extends Test implements
         $this->scenario->setFeature($this->getSpecFromMethod());
         $code = $this->getSourceCode();
         $this->parser->parseFeature($code);
-        $this->parser->attachMetadata(Annotation::forMethod($this->testClassInstance, $this->testMethod)->raw());
+        $this->getMetadata()->setParamsFromAnnotations(Annotation::forMethod($this->testClassInstance, $this->testMethod)->raw());
         $this->getMetadata()->getService('di')->injectDependencies($this->testClassInstance);
 
         // add example params to feature
@@ -80,11 +81,13 @@ class Cest extends Test implements
             $this->executeBeforeMethods($this->testMethod, $I);
             $this->executeTestMethod($I);
             $this->executeAfterMethods($this->testMethod, $I);
-            $this->executeHook($I, 'after');
+            $this->executeHook($I, 'passed');
         } catch (\Exception $e) {
             $this->executeHook($I, 'failed');
             // fails and errors are now handled by Codeception\PHPUnit\Listener
             throw $e;
+        } finally {
+            $this->executeHook($I, 'after');
         }
     }
 
@@ -97,7 +100,7 @@ class Cest extends Test implements
 
     protected function executeBeforeMethods($testMethod, $I)
     {
-        $annotations = \PHPUnit_Util_Test::parseTestMethodAnnotations(get_class($this->testClassInstance), $testMethod);
+        $annotations = \PHPUnit\Util\Test::parseTestMethodAnnotations(get_class($this->testClassInstance), $testMethod);
         if (!empty($annotations['method']['before'])) {
             foreach ($annotations['method']['before'] as $m) {
                 $this->executeContextMethod(trim($m), $I);
@@ -106,7 +109,7 @@ class Cest extends Test implements
     }
     protected function executeAfterMethods($testMethod, $I)
     {
-        $annotations = \PHPUnit_Util_Test::parseTestMethodAnnotations(get_class($this->testClassInstance), $testMethod);
+        $annotations = \PHPUnit\Util\Test::parseTestMethodAnnotations(get_class($this->testClassInstance), $testMethod);
         if (!empty($annotations['method']['after'])) {
             foreach ($annotations['method']['after'] as $m) {
                 $this->executeContextMethod(trim($m), $I);
@@ -149,7 +152,7 @@ class Cest extends Test implements
 
     public function toString()
     {
-        return sprintf('%s: %s', ReflectionHelper::getClassShortName($this->getTestClass()), ucfirst($this->getFeature()));
+        return sprintf('%s: %s', ReflectionHelper::getClassShortName($this->getTestClass()), Message::ucfirst($this->getFeature()));
     }
 
     public function getSignature()
@@ -202,7 +205,7 @@ class Cest extends Test implements
         $class  = get_class($this->getTestClass());
         $method = $this->getTestMethod();
 
-        return \PHPUnit_Util_Test::getLinesToBeCovered($class, $method);
+        return \PHPUnit\Util\Test::getLinesToBeCovered($class, $method);
     }
 
     public function getLinesToBeUsed()
@@ -210,6 +213,6 @@ class Cest extends Test implements
         $class  = get_class($this->getTestClass());
         $method = $this->getTestMethod();
 
-        return \PHPUnit_Util_Test::getLinesToBeUsed($class, $method);
+        return \PHPUnit\Util\Test::getLinesToBeUsed($class, $method);
     }
 }

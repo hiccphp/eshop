@@ -1,9 +1,9 @@
 <?php
 namespace app\modules\controllers;
 
-use Yii;
 use yii\web\Controller;
 use app\modules\models\Admin;
+use Yii;
 
 class PublicController extends Controller
 {
@@ -18,7 +18,7 @@ class PublicController extends Controller
                 Yii::$app->end();
             }
         }
-        return $this->render("login", ["model" => $model]);
+        return $this->render("login", ['model' => $model]);
     }
 
     public function actionLogout()
@@ -38,9 +38,13 @@ class PublicController extends Controller
         if (Yii::$app->request->isPost) {
             $post = Yii::$app->request->post();
             if ($model->seekPass($post)) {
-                Yii::$app->session->setFlash('info', '电子邮件已经发送城，请查收');
+                Yii::$app->session->setFlash('info', '电子邮件已经发送成功，请查收');
+                return $this->render("seekpassword", ['model' => $model]);
             }
         }
         return $this->render("seekpassword", ['model' => $model]);
     }
+
+
+
 }
