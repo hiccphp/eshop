@@ -35,3 +35,5 @@ phpunit.phar
 composer.lock
 .env
 
+# for vscode project
+eshop.vscode-workspace
