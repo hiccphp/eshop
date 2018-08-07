@@ -100,7 +100,7 @@ class User extends ActiveRecord
             $mailer->setFrom("18031243725@163.com");
             $mailer->setTo($data['User']['useremail']);
             $mailer->setSubject('慕课商城-新建用户');
-            if ($mailer->send() && $this->reg($data, 'regbyemail')) {
+            if ($mailer->send() && $this->reg($data, 'regbymail')) {
                 return true;
             }
         }

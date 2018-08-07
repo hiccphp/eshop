@@ -1,5 +1,9 @@
 <?php
+
 namespace app\controllers;
+
+use Yii;
+use app\models\User;
 
 class MemberController extends BaseController
 {
@@ -19,6 +23,7 @@ class MemberController extends BaseController
         if (Yii::$app->request->isPost) {
             $post = Yii::$app->request->post();
             if ($model->login($post)) {
+                $url = Yii::$app->session->getFlash('referrer');
                 return $this->redirect($url);
             }
         }
@@ -32,5 +37,18 @@ class MemberController extends BaseController
         if (!isset(Yii::$app->session['isLogin'])) {
             return $this->goback(Yii::$app->request->referrer);
         }
+    }
+
+    public function actionReg()
+    {
+        $model = new User;
+        if (Yii::$app->request->isPost) {
+            $post = Yii::$app->request->post();
+            if ($model->regByMail($post)) {
+                Yii::$app->session->setFlash('info', '电子邮件发送成功！');
+            }
+        }
+        $this->layout = 'layout2';
+        return $this->render('auth', ['model' => $model]);
     }
 }
