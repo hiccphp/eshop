@@ -60,6 +60,36 @@ $config = [
             ],
         ],
         */
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'github' => [
+                    'class' => 'yii\authclient\clients\Github',
+                    'clientId' =>'414e11a04208658b7048',
+                    'clientSecret' => 'b347c6e2ffb33a80319583c1166e9f38571f02d6',
+                    'normalizeUserAttributeMap' => [
+                        'username' => 'name',
+                        'avatar_url' => 'avatar_url',
+                    ],
+                ],
+                //etc.
+            ],
+        ],
+        // 'authClientCollection' => [
+        //     'class' => 'yii\authclient\Collection',
+        //     'clients' => [
+        //         // 'google' => [
+        //         //     'class' => 'yii\authclient\clients\Google',
+        //         //     'clientId' => 'google_client_id',
+        //         //     'clientSecret' => 'google_client_secret',
+        //         // ],
+        //         'github' => [
+        //             'class' => 'yii\authclient\clients\GitHub',
+        //             'clientId' => '414e11a04208658b7048',
+        //             'clientSecret' => 'b347c6e2ffb33a80319583c1166e9f38571f02d6',
+        //         ],
+        //     ],
+        // ],
     ],
     'params' => $params,
 ];

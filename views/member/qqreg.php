@@ -50,7 +50,7 @@
 <script>
     var qqbtn = document.getElementById("login_qq");
     qqbtn.onclick = function(){
-        window.location.href="<?php echo yii\helpers\Url::to(['member/qqlogin']) ?>";
+        window.location.href="<?php echo yii\helpers\Url::to(['/index/auth','authclient'=>'github'],['class'=>'github']) ?>";
     }
 </script>
 

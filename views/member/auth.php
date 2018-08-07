@@ -1,6 +1,6 @@
 <?php
-    use yii\bootstrap\ActiveForm;
-    use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
 ?>
 <!-- ============================================================= HEADER : END ============================================================= -->		<!-- ========================================= MAIN ========================================= -->
 <main id="authentication" class="inner-bottom-md">
@@ -61,19 +61,19 @@
 					<h2 class="bordered">新建账户</h2>
 					<p>创建一个属于你自己的账户</p>
                     <?php
-                        if (Yii::$app->session->hasFlash('info')) {
-                            echo Yii::$app->session->getFlash('info');
-                        }
-                        $form = ActiveForm::begin([
-                            'fieldConfig' => [
-                                'template' => '<div class="field-row">{label}{input}</div>{error}'
-                            ],
-                            'options' => [
-                                'class' => 'register-form cf-style-1',
-                                'role' => 'form',
-                            ],
-                            'action' => ['member/reg'],
-                        ]);
+                    if (Yii::$app->session->hasFlash('info')) {
+                        echo Yii::$app->session->getFlash('info');
+                    }
+                    $form = ActiveForm::begin([
+                        'fieldConfig' => [
+                            'template' => '<div class="field-row">{label}{input}</div>{error}'
+                        ],
+                        'options' => [
+                            'class' => 'register-form cf-style-1',
+                            'role' => 'form',
+                        ],
+                        'action' => ['member/reg'],
+                    ]);
                     ?>
                         <?php echo $form->field($model, 'useremail')->textInput(['class' => 'le-input']); ?>
                         <div class="buttons-holder">
@@ -105,7 +105,7 @@
 
 	var githubbtn = document.getElementById("login_github");
 	githubbtn.onclick = function() {
-		window.location.href="<?php echo yii\helpers\Url::to(['member/githubLogin'])?>";
+		window.location.href="<?php echo yii\helpers\Url::to(['member/oauth', 'authclient' => 'github']) ?>";
 	}
 </script>
 

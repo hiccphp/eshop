@@ -3,11 +3,42 @@
 namespace app\controllers;
 
 use Yii;
+use yii\web\Response;
 use app\models\User;
+use app\models\LoginForm;
+use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
 
 class MemberController extends BaseController
 {
     public $layout = "layout2";
+
+    public function actions()
+    {
+        return [
+            'oauth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'onAuthSuccess'],
+            ],
+        ];
+    }
+
+    //登录成功回调的内容
+    public function onAuthSuccess($client)
+    {
+        $userInfo = $client->getUserAttributes();
+        $session = \Yii::$app->session;
+        $session['userinfo'] = $userInfo;
+        //保存特殊的唯一数据，用于注册的时候能够进行获取，如果不放到session的地方，就不知道放到哪里才能看到
+        $session['openid'] = $client->getTitle() . '-' . ArrayHelper::getValue($userInfo, 'id');
+        //查询是否存在这个唯一标识的用户内容，github就是id
+        if ($model = User::find()->where('openid = :openid', [':openid' => $session['openid']])->one()) {
+            $session['loginname'] = $model->username;
+            $session['isLogin'] = 1;
+            return $this->redirect(['index/index']);
+        }
+        return $this->redirect(['member/authreg']);
+    }
 
     public function actionAuth()
     {
@@ -51,4 +82,35 @@ class MemberController extends BaseController
         $this->layout = 'layout2';
         return $this->render('auth', ['model' => $model]);
     }
+
+    public function actionAuthreg()
+    {
+        $this->layout = 'layout2';
+        $model = new User;
+        if (Yii::$app->request->isPost) {
+            $post = Yii::$app->request->post();
+            $session = Yii::$app->session;            
+            $post['User']['openid'] = $session['openid'];
+            if($model->reg($post, 'qqreg')) {
+                $session['loginname'] = $post['User']['username'];
+                $session['isLogin'] = 1;
+                return $this->redirect(['index/index']);
+            }
+            
+        }
+        return $this->render('qqreg', ['model' => $model]);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
