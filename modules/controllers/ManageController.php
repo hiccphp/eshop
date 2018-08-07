@@ -26,7 +26,7 @@ class ManageController extends CommonController
         }
         if (Yii::$app->request->isPost) {
             $post = Yii::$app->request->post();
-            if ($model->changePass($post)) {
+            if ($model->changePass($post)) { Yii::$app->session->setFlash();
                 Yii::$app->session->setFlash('info', '密码修改成功');
             }
         }
@@ -41,9 +41,9 @@ class ManageController extends CommonController
         $model = Admin::find();
         $count = $model->count();
         $pageSize = Yii::$app->params['pageSize']['manage'];
-        $pager = new Pagination(['totalCount'=>$count, 'pageSize'=>$pageSize]);
+        $pager = new Pagination(['totalCount' => $count, 'pageSize' => $pageSize]);
         $managers = $model->offset($pager->offset)->limit($pager->limit)->all();
-        return $this->render("managers", ['managers' => $managers, 'pager'=>$pager]);
+        return $this->render("managers", ['managers' => $managers, 'pager' => $pager]);
     }
 
     public function actionReg()
@@ -60,7 +60,7 @@ class ManageController extends CommonController
         }
         $model->adminpass = '';
         $model->repass = '';
-        return $this->render("reg", ['model'=>$model]);
+        return $this->render("reg", ['model' => $model]);
     }
 
     public function actionDel()
@@ -71,7 +71,7 @@ class ManageController extends CommonController
             return false;
         }
         $model = new Admin;
-        if ($model->deleteAll('adminid=:id', [':id'=>$adminId])) {
+        if ($model->deleteAll('adminid=:id', [':id' => $adminId])) {
             Yii::$app->session->setFlash('info', '删除成功！');
             $this->redirect(['managers']);
         }
@@ -80,7 +80,7 @@ class ManageController extends CommonController
     public function actionChangeemail()
     {
         $this->layout = 'layout1';
-        $model = Admin::find()->where('adminuser=:user', [':user'=>Yii::$app->session['admin']['adminuser']])->one();
+        $model = Admin::find()->where('adminuser=:user', [':user' => Yii::$app->session['admin']['adminuser']])->one();
         if (Yii::$app->request->isPost) {
             $post = Yii::$app->request->post();
             if ($model->changeemail($post)) {
@@ -88,13 +88,13 @@ class ManageController extends CommonController
             }
         }
         $model->adminpass = "";
-        return $this->render('changeemail', ['model'=>$model]);
+        return $this->render('changeemail', ['model' => $model]);
     }
 
     public function actionChangepass()
     {
         $this->layout = 'layout1';
-        $model = Admin::find()->where('adminuser=:user', [':user'=>Yii::$app->session['admin']['adminuser']])->one();
+        $model = Admin::find()->where('adminuser=:user', [':user' => Yii::$app->session['admin']['adminuser']])->one();
         if (Yii::$app->request->isPost) {
             $post = Yii::$app->request->post();
             if ($model->changepass($post)) {
@@ -102,6 +102,6 @@ class ManageController extends CommonController
             }
         }
         $model->adminpass = "";
-        return $this->render('changepass', ['model'=>$model]);
+        return $this->render('changepass', ['model' => $model]);
     }
 }

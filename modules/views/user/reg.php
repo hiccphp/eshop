@@ -1,6 +1,7 @@
 <?php
     use yii\bootstrap\ActiveForm;
     use yii\helpers\Html;
+    use yii\helpers\Url;
 ?>
     <link rel="stylesheet" href="assets/admin/css/compiled/new-user.css" type="text/css" media="screen" />
     <!-- main container -->
