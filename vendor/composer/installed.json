@@ -507,23 +507,23 @@
     },
     {
         "name": "crazyfd/yii2-qiniu",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "version": "1.03",
+        "version_normalized": "1.03.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/crazyfd/upload.git",
-            "reference": "7334326aac39b4839d045ab28493e37bf1db5d56"
+            "reference": "0150d40264ba6e31928615a248524cda9e5c3ad0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/crazyfd/upload/zipball/7334326aac39b4839d045ab28493e37bf1db5d56",
-            "reference": "7334326aac39b4839d045ab28493e37bf1db5d56",
+            "url": "https://api.github.com/repos/crazyfd/upload/zipball/0150d40264ba6e31928615a248524cda9e5c3ad0",
+            "reference": "0150d40264ba6e31928615a248524cda9e5c3ad0",
             "shasum": ""
         },
         "require": {
             "yiisoft/yii2": "*"
         },
-        "time": "2018-01-03T06:10:14+00:00",
+        "time": "2018-01-03T03:28:03+00:00",
         "type": "yii2-extension",
         "installation-source": "source",
         "autoload": {
