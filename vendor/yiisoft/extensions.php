@@ -57,15 +57,6 @@ return array (
       '@yii/authclient' => $vendorDir . '/yiisoft/yii2-authclient/src',
     ),
   ),
-  'yiisoft/yii2-gii' => 
-  array (
-    'name' => 'yiisoft/yii2-gii',
-    'version' => '2.0.6.0',
-    'alias' => 
-    array (
-      '@yii/gii' => $vendorDir . '/yiisoft/yii2-gii',
-    ),
-  ),
   'crazyfd/yii2-qiniu' => 
   array (
     'name' => 'crazyfd/yii2-qiniu',
@@ -73,6 +64,15 @@ return array (
     'alias' => 
     array (
       '@crazyfd/qiniu' => $vendorDir . '/crazyfd/yii2-qiniu',
+    ),
+  ),
+  'yiisoft/yii2-gii' => 
+  array (
+    'name' => 'yiisoft/yii2-gii',
+    'version' => '2.0.7.0',
+    'alias' => 
+    array (
+      '@yii/gii' => $vendorDir . '/yiisoft/yii2-gii/src',
     ),
   ),
 );
