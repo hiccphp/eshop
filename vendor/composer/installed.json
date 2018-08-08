@@ -509,6 +509,49 @@
         "description": "BDD assertion library for PHPUnit"
     },
     {
+        "name": "crazyfd/yii2-qiniu",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/crazyfd/upload.git",
+            "reference": "7334326aac39b4839d045ab28493e37bf1db5d56"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/crazyfd/upload/zipball/7334326aac39b4839d045ab28493e37bf1db5d56",
+            "reference": "7334326aac39b4839d045ab28493e37bf1db5d56",
+            "shasum": ""
+        },
+        "require": {
+            "yiisoft/yii2": "*"
+        },
+        "time": "2018-01-03T06:10:14+00:00",
+        "type": "yii2-extension",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "crazyfd\\qiniu\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "crazyfd",
+                "email": "crazyfd@qq.com"
+            }
+        ],
+        "description": "yii2上传到七牛云存储",
+        "keywords": [
+            "qiniu",
+            "upload",
+            "yii"
+        ]
+    },
+    {
         "name": "doctrine/instantiator",
         "version": "1.0.5",
         "version_normalized": "1.0.5.0",
